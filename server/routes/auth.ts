@@ -27,7 +27,7 @@ router.get("/current-user", (req, res, _) => {
 
 	if (!isAuth) return res.status(200).send({ currentUser: null });
 
-	res.status(200).send({ currentUser: req.user });
+	res.status(200).json({ currentUser: req.user });
 });
 
 export { router as authRoutes };
