@@ -44,7 +44,7 @@ function NavBar({ currentUser }: Props): ReactElement {
 						<Link href="/register">
 							<a className={classes.link}>Register</a>
 						</Link>
-						<Link href="/register">
+						<Link href="/login">
 							<a className={classes.link}>Login</a>
 						</Link>
 					</>
