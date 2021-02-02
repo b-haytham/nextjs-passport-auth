@@ -3,16 +3,21 @@ import Layout from "component/Layout";
 import { GetServerSidePropsContext } from "next";
 import React from "react";
 
-export type CurrentUserType = {
-	_id: string;
-	email: string;
-} | null;
+export type CurrentUserType =
+	| {
+			_id: string;
+			email: string;
+	  }
+	| null
+	| undefined;
 
 interface HomePageProps {
 	currentUser: CurrentUserType;
 }
 
 export default function Home({ currentUser }: HomePageProps) {
+	console.log(currentUser);
+	console.log(currentUser?.email);
 	return (
 		<Layout currentUser={currentUser}>
 			<Box display="flex" flexDirection="column" alignItems="center">
@@ -26,8 +31,6 @@ export default function Home({ currentUser }: HomePageProps) {
 
 				{!currentUser && (
 					<Typography
-						// @ts-ignore
-						variant="p"
 						align="center"
 						style={{
 							fontWeight: "bold",
@@ -42,7 +45,6 @@ export default function Home({ currentUser }: HomePageProps) {
 				{currentUser && (
 					<>
 						<Typography
-							// @ts-ignore
 							variant="h4"
 							align="center"
 							style={{
@@ -54,8 +56,6 @@ export default function Home({ currentUser }: HomePageProps) {
 							you are logged in
 						</Typography>
 						<Typography
-							// @ts-ignore
-							variant="p"
 							align="center"
 							style={{
 								fontWeight: "bold",
@@ -72,12 +72,16 @@ export default function Home({ currentUser }: HomePageProps) {
 	);
 }
 
-export async function getServerSideProps(_: GetServerSidePropsContext) {
-	const res = await fetch(`http://localhost:3000/api/auth/current-user`);
-	const data = await res.json();
-	console.log(data);
+export async function getServerSideProps(ctx: GetServerSidePropsContext) {
+	console.log(ctx.req.headers);
+	const res = await fetch(`http://localhost:3000/api/auth/current-user`, {
+		//@ts-ignore
+		headers: ctx.req.headers,
+	});
+	const { currentUser } = await res.json();
+	console.log("SERVER SIDE PROPS", currentUser);
 
 	return {
-		props: { data }, // will be passed to the page component as props
+		props: { currentUser }, // will be passed to the page component as props
 	};
 }

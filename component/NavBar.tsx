@@ -5,6 +5,9 @@ import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
 import { CurrentUserType } from "pages";
+import { Button } from "@material-ui/core";
+import axios from "axios";
+import { useRouter } from "next/router";
 
 interface Props {
 	currentUser: CurrentUserType;
@@ -28,6 +31,7 @@ const useStyles = makeStyles((_) => ({
 
 function NavBar({ currentUser }: Props): ReactElement {
 	const classes = useStyles();
+	const router = useRouter();
 	return (
 		<AppBar position="static">
 			<Toolbar>
@@ -46,9 +50,15 @@ function NavBar({ currentUser }: Props): ReactElement {
 					</>
 				)}
 				{currentUser && (
-					<Link href="/register">
-						<a className={classes.link}>Logout</a>
-					</Link>
+					<Button
+						className={classes.link}
+						onClick={async () => {
+							await axios.post("/api/auth/logout");
+							router.reload();
+						}}
+					>
+						Logout
+					</Button>
 				)}
 			</Toolbar>
 		</AppBar>

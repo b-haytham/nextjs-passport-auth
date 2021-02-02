@@ -22,9 +22,13 @@ app.prepare().then(async () => {
 
 	const server = express();
 
+	server.set("trust proxy", 1);
+
 	server.use(express.json());
 
-	server.use(session({ secret: "secret" }));
+	server.use(
+		session({ secret: "secret", resave: false, saveUninitialized: true })
+	);
 
 	server.use(passport.initialize());
 	server.use(passport.session());

@@ -7,14 +7,14 @@ router.post("/register", passport.authenticate("local"), (req, res) => {
 	//@ts-ignore
 	if (req.user) delete req.user.password;
 
-	res.status(201).send({ user: req.user });
+	res.status(201).json({ user: req.user });
 });
 
 router.post("/login", passport.authenticate("local"), (req, res) => {
 	//@ts-ignore
 	if (req.user) delete req.user.password;
 
-	res.status(200).send({ user: req.user });
+	res.status(200).json({ user: req.user });
 });
 router.post("/logout", (req, res, _) => {
 	req.session.destroy(() => {
@@ -24,6 +24,10 @@ router.post("/logout", (req, res, _) => {
 });
 router.get("/current-user", (req, res, _) => {
 	const isAuth = req.isAuthenticated();
+
+	console.log(isAuth);
+
+	console.log("req.user", req.user);
 
 	if (!isAuth) return res.status(200).send({ currentUser: null });
 
